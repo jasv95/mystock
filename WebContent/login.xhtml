@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<head>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+
+<!-- Optional theme -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" />
+
+<!-- Latest compiled and minified JavaScript -->
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" />
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Login page</title>
+</head>
+
+<h:body>
+	<c:choose>
+		<c:when test="#{sessionScope.username != null}">
+			<h1>You are already logged in</h1>
+			<meta http-equiv="refresh" content="0; url=faces/user_dash.xhtml" />
+		</c:when>
+		<c:otherwise>
+			<div class="panel panel-info" style="margin: 20px;">
+				<div class="panel-heading">
+					<h1 class="panel-title" align="center">Login</h1>
+				</div>
+				<div class="panel-body">
+					<div class="container">
+						<div class="row">
+							<div class="form_bg">
+								<h:form id="login_form" role="form">
+									<div class="form-group has-feedback ">
+										<h:inputText id="uname" class="form-control"
+											p:placeholder="User Name" value="#{User_bean.user}"
+											required="true" requiredMessage="Please enter User name" />
+										<i class="glyphicon glyphicon-user form-control-feedback "></i>
+									</div>
+									<h:message for="uname" style="color:red" />
+									<br />
+									<div class="form-group has-feedback ">
+										<h:inputSecret id="pwd" class="form-control"
+											p:placeholder="Password" value="#{User_bean.pwd}"
+											required="true" requiredMessage="Please enter password" />
+										<i class="glyphicon glyphicon-lock form-control-feedback"></i>
+									</div>
+									<h:message for="pwd" style="color:red" />
+									<br />
+									<div class="align-center" align="center">
+										<h:commandButton class="btn btn-success" value="Login"
+											action="#{User_bean.validate}" />
+									</div>
+									<div>
+										<div class="panel-footer" align="center">
+											<h:outputLabel value="don't have an account!" />
+											<h:link value="Click here" outcome="register" />
+										</div>
+									</div>
+								</h:form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</c:otherwise>
+	</c:choose>
+
+</h:body>
+
+</html>
