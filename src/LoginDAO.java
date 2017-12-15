@@ -9,50 +9,49 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 public class LoginDAO {
-	
-	public static boolean login(String user, String password) {
+
+	public static String login(String user, String password) {
 
 		Connection con = null;
 		try {
 			// Setup the DataSource object
-			
+
 			con = DataConnect.getConnection();
 
 			// Get a prepared SQL statement
-			String sql = "SELECT name from users where user_name = ? and pwd = ?";
+			String sql = "SELECT user_name,user_id from users where user_name = ? and pwd = ?";
 			PreparedStatement st = con.prepareStatement(sql);
-			st.setString(1,user);
+			st.setString(1, user);
 			st.setString(2, password);
 			// Execute the statement
-			ResultSet rs= st.executeQuery();
-			if(rs.next())
-			{
+			ResultSet rs = st.executeQuery();
+
+			if (rs.next()) {
 				FacesContext fc = FacesContext.getCurrentInstance();
 				ExternalContext ec = fc.getExternalContext();
 				ec.redirect("user_dash.xhtml");
-				return true;
-			}
-			else {
-				return false;
+				String id = rs.getString(2);
+				DataConnect.close();
+				return id;
+			} else {
+
+				DataConnect.close();
+				return "false";
 			}
 
-		} 
-		catch (IOException e) {
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}catch (Exception e) {
+		} catch (Exception e) {
 			System.err.println("Exception: " + e.getMessage());
 		} finally {
-			try {
-				if(con!=null)
-				con.close();
-			} catch (SQLException e) {
-			}
+			if (con != null)
+				DataConnect.close();
 		}
-		return false;
+		return "false";
 	}
 
-	public static String register(String user,String name,String email, String password) {
+	public static String register(String user, String name, String email, String password) {
 		Connection con = null;
 		try {
 
@@ -60,31 +59,28 @@ public class LoginDAO {
 			con = DataConnect.getConnection();
 
 			String sql_check = "select user_name from users where user_name=? ";
-			
-					// Get a prepared SQL statement
-					String sql = "INSERT INTO USERS"
-							+ "(user_name, name, email, pwd) VALUES"
-							+ "(?,?,?,?)";
-					
+
+			// Get a prepared SQL statement
+			String sql = "INSERT INTO USERS" + "(user_name, name, email, pwd) VALUES" + "(?,?,?,?)";
+
 			PreparedStatement st2 = con.prepareStatement(sql_check);
 			st2.setString(1, user);
 			ResultSet rs = st2.executeQuery();
-			if(rs.next()) {
+			if (rs.next()) {
 				FacesContext facesContext = FacesContext.getCurrentInstance();
 				FacesMessage facesMessage = new FacesMessage("Username Already Exists!");
 				facesContext.addMessage("main_form:uname", facesMessage);
 				return "Already Exists";
 
-			}else {
+			} else {
 				PreparedStatement st = con.prepareStatement(sql);
-				st.setString(1,user);
-				st.setString(2,name);
-				st.setString(3,email);
-				st.setString(4,password);
+				st.setString(1, user);
+				st.setString(2, name);
+				st.setString(3, email);
+				st.setString(4, password);
 
 				// Execute the statement
-				if(st.executeUpdate()>0)
-				{
+				if (st.executeUpdate() > 0) {
 					con.close();
 					return "true";
 				}
@@ -94,12 +90,128 @@ public class LoginDAO {
 			System.err.println("Exception: " + e.getMessage());
 		} finally {
 			try {
-				if(con!=null)
+				if (con != null)
 					con.close();
 			} catch (SQLException e) {
 			}
 		}
 		return "false";
+	}
+
+	public static String update(String uname, String name, String email, String pwd, Integer uid) {
+		// TODO Auto-generated method stub
+		Connection con = null;
+		try {
+
+			// Get a connection object
+			con = DataConnect.getConnection();
+
+			String sql_check = "select user_name from users where user_name=? ";
+			PreparedStatement st2 = con.prepareStatement(sql_check);
+			st2.setString(1, uname);
+			ResultSet rs = st2.executeQuery();
+			rs.next();
+			if (rs.next()) {
+				FacesContext facesContext = FacesContext.getCurrentInstance();
+				FacesMessage facesMessage = new FacesMessage("Username Already Exists!");
+				facesContext.addMessage("main_form:uname", facesMessage);
+				return "Already Exists";
+
+			}
+
+			// Get a prepared SQL statement
+			String sql = "UPDATE USERS SET " + "user_name=? ," + "name=? ," + "email=? ," + "pwd=? "
+					+ "where user_id=?";
+
+			PreparedStatement st = con.prepareStatement(sql);
+			st.setString(1, uname);
+			st.setString(2, name);
+			st.setString(3, email);
+			st.setString(4, pwd);
+			st.setInt(5, uid);
+
+			// Execute the statement
+			if (st.executeUpdate() > 0) {
+				con.close();
+				return "true";
+			}
+
+		} catch (Exception e) {
+			System.err.println("Exception: " + e.getMessage());
+		} finally {
+			try {
+				if (con != null)
+					con.close();
+			} catch (SQLException e) {
+			}
+		}
+		return "false";
+	}
+
+	public static Double getAccBalance(int user_id) {
+		Connection con = null;
+		try {
+			// Setup the DataSource object
+
+			con = DataConnect.getConnection();
+
+			// Get a prepared SQL statement
+			String sql = "SELECT balance from users where user_id = ?";
+			PreparedStatement st = con.prepareStatement(sql);
+			st.setInt(1, user_id);
+			// Execute the statement
+			ResultSet rs = st.executeQuery();
+
+			if (rs.next()) {
+				String balance = rs.getString(1);
+				DataConnect.close();
+				return Double.parseDouble(balance);
+			} else {
+
+				DataConnect.close();
+				return null;
+			}
+
+		} catch (Exception e) {
+
+		}
+		return null;
+
+	}
+	
+	public static boolean setAccBalance(int user_id,double balance) {
+		Connection con = null;
+		try {
+			// Setup the DataSource object
+
+			con = DataConnect.getConnection();
+
+			// Get a prepared SQL statement
+			String sql = "update  users set balance=? where user_id = ?";
+			PreparedStatement st = con.prepareStatement(sql);
+			st.setDouble(1, balance);
+			st.setInt(2, user_id);
+			// Execute the statement
+			if (st.executeUpdate() > 0) {
+				con.close();
+				return true;
+			}
+			 else {
+
+				DataConnect.close();
+				return false;
+			}
+
+		} catch (Exception e) {
+
+		}
+		return false;
+
+	}
+	
+	public static String getUid() {
+		String uid = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userid");
+		return uid;
 	}
 
 }

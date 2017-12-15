@@ -31,9 +31,10 @@ public class User_bean {
 	}
 
 	public String validate() {
-		boolean valid = LoginDAO.login(user, pwd);
-		if (valid) {
+		String valid = LoginDAO.login(user, pwd);
+		if (!valid.equals("false")) {
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("username", user);
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("userid", valid);
 			return "user_dash.xhtml";
 			
         } else {
@@ -55,6 +56,11 @@ public class User_bean {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return null;
+	}
+	
+	public String show() {
+		
 		return null;
 	}
 }
