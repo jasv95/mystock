@@ -148,66 +148,6 @@ public class LoginDAO {
 		return "false";
 	}
 
-	public static Double getAccBalance(int user_id) {
-		Connection con = null;
-		try {
-			// Setup the DataSource object
-
-			con = DataConnect.getConnection();
-
-			// Get a prepared SQL statement
-			String sql = "SELECT balance from users where user_id = ?";
-			PreparedStatement st = con.prepareStatement(sql);
-			st.setInt(1, user_id);
-			// Execute the statement
-			ResultSet rs = st.executeQuery();
-
-			if (rs.next()) {
-				String balance = rs.getString(1);
-				DataConnect.close();
-				return Double.parseDouble(balance);
-			} else {
-
-				DataConnect.close();
-				return null;
-			}
-
-		} catch (Exception e) {
-
-		}
-		return null;
-
-	}
-	
-	public static boolean setAccBalance(int user_id,double balance) {
-		Connection con = null;
-		try {
-			// Setup the DataSource object
-
-			con = DataConnect.getConnection();
-
-			// Get a prepared SQL statement
-			String sql = "update  users set balance=? where user_id = ?";
-			PreparedStatement st = con.prepareStatement(sql);
-			st.setDouble(1, balance);
-			st.setInt(2, user_id);
-			// Execute the statement
-			if (st.executeUpdate() > 0) {
-				con.close();
-				return true;
-			}
-			 else {
-
-				DataConnect.close();
-				return false;
-			}
-
-		} catch (Exception e) {
-
-		}
-		return false;
-
-	}
 	
 	public static String getUid() {
 		String uid = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userid");

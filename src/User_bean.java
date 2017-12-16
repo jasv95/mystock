@@ -63,4 +63,8 @@ public class User_bean {
 		
 		return null;
 	}
+	
+	public String redToAccount() {
+		return "Account.xhtml";
+	}
 }

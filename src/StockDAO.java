@@ -82,7 +82,7 @@ public class StockDAO {
 		int avail_qty = 0;
 		Double Total_price = Double.parseDouble(s_qty) * Double.parseDouble(s_price);
 		String uid = LoginDAO.getUid();
-		Double available_bal = LoginDAO.getAccBalance(Integer.parseInt(uid));
+		Double available_bal = AccountDAO.getAccBalance(Integer.parseInt(uid));
 		if (available_bal < Total_price) {
 			return "low_balance";
 		} else {
@@ -102,7 +102,7 @@ public class StockDAO {
 					st.setInt(1, Integer.parseInt(s_qty) + avail_qty);
 					// Execute the statement
 					if (st.executeUpdate() > 0) {
-						LoginDAO.setAccBalance(Integer.parseInt(uid), available_bal - Total_price);
+						AccountDAO.setAccBalance(Integer.parseInt(uid), available_bal - Total_price);
 						create_activirtRecord(Integer.parseInt(uid), s_sym, Double.parseDouble(s_price), s_qty, "buy");
 						DataConnect.close();
 						return "true";
@@ -119,7 +119,7 @@ public class StockDAO {
 
 					// Execute the statement
 					if (st.executeUpdate() > 0) {
-						LoginDAO.setAccBalance(Integer.parseInt(uid), available_bal - Total_price);
+						AccountDAO.setAccBalance(Integer.parseInt(uid), available_bal - Total_price);
 						create_activirtRecord(Integer.parseInt(uid), s_sym, Double.parseDouble(s_price), s_qty, "buy");
 						DataConnect.close();
 						return "true";
@@ -141,7 +141,7 @@ public class StockDAO {
 		System.out.println("inside StockDAO.sell");
 		int avail_qty = 0;
 		Double Total_price = Double.parseDouble(s_qty) * Double.parseDouble(s_price);
-		Double available_bal = LoginDAO.getAccBalance(Integer.parseInt(uid));
+		Double available_bal = AccountDAO.getAccBalance(Integer.parseInt(uid));
 
 		try {
 			Connection con = DataConnect.getConnection();
@@ -160,7 +160,7 @@ public class StockDAO {
 					st.setInt(1, avail_qty - Integer.parseInt(s_qty));
 					// Execute the statement
 					if (st.executeUpdate() > 0) {
-						LoginDAO.setAccBalance(Integer.parseInt(uid), available_bal + Total_price);
+						AccountDAO.setAccBalance(Integer.parseInt(uid), available_bal + Total_price);
 						create_activirtRecord(Integer.parseInt(uid), s_sym, Double.parseDouble(s_price), s_qty, "sell");
 						DataConnect.close();
 						return "true";
@@ -176,7 +176,7 @@ public class StockDAO {
 					st.setString(2, s_sym);
 					// Execute the statement
 					if (st.executeUpdate() > 0) {
-						LoginDAO.setAccBalance(Integer.parseInt(uid), available_bal + Total_price);
+						AccountDAO.setAccBalance(Integer.parseInt(uid), available_bal + Total_price);
 						create_activirtRecord(Integer.parseInt(uid), s_sym, Double.parseDouble(s_price), s_qty, "sell");
 						DataConnect.close();
 						return "true";

@@ -2,6 +2,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URL;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -17,6 +19,10 @@ import javax.faces.context.FacesContext;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 @ManagedBean(name = "StockData")
 @ApplicationScoped
@@ -138,9 +144,34 @@ public class StockData {
 		return ;
 	}
 	
+	public void installAllTrustingManager() {
+        TrustManager[] trustAllCerts;
+        trustAllCerts = new TrustManager[]{new X509TrustManager() {
+            public X509Certificate[] getAcceptedIssuers() {
+                return null;
+            }
+
+            public void checkClientTrusted(X509Certificate[] certs, String authType) {
+            }
+
+            public void checkServerTrusted(X509Certificate[] certs, String authType) {
+            }
+        }};
+
+        // Install the all-trusting trust manager
+        try {
+            SSLContext sc = SSLContext.getInstance("TLS");
+            sc.init(null, trustAllCerts, new SecureRandom());
+            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+        } catch (Exception e) {
+            System.out.println("Exception :" + e);
+        }
+        return;
+    }
+	
 	public void makeMarkypTable(String symbol,String interval) {
 		System.out.println("inside StockData.makeTable");
-		
+		installAllTrustingManager();
         String url = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + symbol + "&interval=" + interval + "&apikey=" + API_KEY;
         System.out.println(url);
         this.table1Markup += "URL::: <a href='" + url + "'>Data Link</a><br>";
@@ -257,4 +288,5 @@ public class StockData {
 		StockDAO.sell(s_sym,s_price,s_qty);
 		return null;
 	}
+	
 }
