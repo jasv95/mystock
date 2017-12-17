@@ -11,10 +11,13 @@ import javax.faces.bean.RequestScoped;
 @RequestScoped
 public class AccountBean {
 
-	private String user_name,user_id,balance;
+	private String user_name,user_id;
+	Double balance;
 	private ArrayList<UserActivity> activityList;
 	private ArrayList<CurrentHoldings> holdingList;
-	
+	 
+
+
 	public ArrayList<CurrentHoldings> getHoldingList() {
 		return holdingList;
 	}
@@ -28,6 +31,8 @@ public class AccountBean {
 	public AccountBean() {
 		createActivity();
 		createHoldingList();
+		String u_id = LoginDAO.getUid();
+		this.balance = AccountDAO.getAccBalance(Integer.parseInt(u_id));
 	}
 	
 
@@ -55,11 +60,11 @@ public class AccountBean {
 		this.user_id = user_id;
 	}
 
-	public String getBalance() {
+	public double getBalance() {
 		return balance;
 	}
 
-	public void setBalance(String balance) {
+	public void setBalance(double balance) {
 		this.balance = balance;
 	}
 	

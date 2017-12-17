@@ -27,7 +27,12 @@
 	<c:choose>
 		<c:when test="#{sessionScope.username != null}">
 			<h1>You are already logged in</h1>
-			<meta http-equiv="refresh" content="0; url=faces/user_dash.xhtml" />
+			<c:if test="#{sessionScope.role == 'user'}">
+			<meta http-equiv="refresh" content="0; url=user_dash.xhtml" />
+			</c:if>
+			<c:if test="#{sessionScope.role == 'admin'}">
+			<meta http-equiv="refresh" content="0; url=admin_dash.xhtml" />
+			</c:if>
 		</c:when>
 		<c:otherwise>
 			<div class="panel panel-info" style="margin: 20px;">

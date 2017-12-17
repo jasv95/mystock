@@ -17,6 +17,14 @@ public class AdminBean {
 	private ArrayList<AdminDAO.ManagerDetails> managerList;
 	private List<SelectItem> userList;
 	private String selecteduser;
+	
+	
+	
+	public AdminBean() {
+		super();
+		createManagerList();
+	}
+	
 	public ArrayList<AccountBean.UserActivity> getActivityList() {
 		return activityList;
 	}
@@ -81,8 +89,18 @@ public class AdminBean {
 		return null;
 	}
 	
-	public String approveManager() {
-		
+	public String createManagerList() {
+		managerList = AdminDAO.getManagerList();
+		return null;
+	}
+	
+	public String approveManager(int manager_id) {
+		if( AdminDAO.approveManager(manager_id)) {
+			System.out.println("true");
+		}
+		else {
+			System.out.println("false");
+		}
 		return null;
 	}
 }

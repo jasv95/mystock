@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class AdminDAO {
-
+	
 	public static ArrayList<ManagerDetails> getManagerList(){
 		ArrayList<ManagerDetails> md = new ArrayList<ManagerDetails>();
 		try {
@@ -14,7 +14,7 @@ public class AdminDAO {
 		
 						String sql = "SELECT * from users natural join manager_detail where role = ? and status = ?";
 						PreparedStatement st = con.prepareStatement(sql);
-						st.setString(1, "admin");
+						st.setString(1, "manager");
 						st.setInt(2,0);;
 						// Execute the statement
 						ResultSet rs = st.executeQuery();
@@ -40,7 +40,7 @@ public class AdminDAO {
 		
 	}
 	
-	static class ManagerDetails{
+	public static class ManagerDetails{
 		private String user_name,email,name;
 		private double fees,balance;
 		int user_id;
@@ -89,5 +89,25 @@ public class AdminDAO {
 			this.user_id = user_id;
 		}
 		
+	}
+
+	public static boolean approveManager(int manager_id) {
+		try {
+			Connection con = DataConnect.getConnection();
+			String sql ="update users set status = ? where user_id=?";
+			PreparedStatement st = con.prepareStatement(sql);
+			System.out.println(String.valueOf(manager_id)+"iddd");
+			st.setInt(1, 1);
+			st.setInt(2, manager_id);
+			if(st.executeUpdate()>0) {
+				return true;
+			}
+			return false;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return false;
 	}
 }

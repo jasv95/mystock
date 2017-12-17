@@ -30,11 +30,12 @@ public class LoginDAO {
 			if (rs.next()) {
 				FacesContext fc = FacesContext.getCurrentInstance();
 				ExternalContext ec = fc.getExternalContext();
-				String role=rs.getString("role");
-				if(role.equals("user")) {
+				String role = rs.getString("role");
+				if (role.equals("user")) {
+					FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("role", "user");
 					ec.redirect("user_dash.xhtml");
-				}
-				else if(role.equals("admin")) {
+				} else if (role.equals("admin")) {
+					FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("role", "admin");
 					ec.redirect("admin_dash.xhtml");
 				}
 				String id = rs.getString("user_id");
@@ -58,7 +59,8 @@ public class LoginDAO {
 		return "false";
 	}
 
-	public static String register(String user, String name, String email, String password) {
+	public static String register(String user, String name, String email, String password, String selectedRole,
+			String fee) {
 		Connection con = null;
 		try {
 
@@ -66,10 +68,13 @@ public class LoginDAO {
 			con = DataConnect.getConnection();
 
 			String sql_check = "select user_name from users where user_name=? ";
-
+			String sql = null;
 			// Get a prepared SQL statement
-			String sql = "INSERT INTO USERS" + "(user_name, name, email, pwd) VALUES" + "(?,?,?,?)";
-
+			if (selectedRole.equals("user")) {
+				sql = "INSERT INTO USERS" + "(user_name, name, email, pwd, role,status) VALUES" + "(?,?,?,?,?,1)";
+			} else {
+				sql = "INSERT INTO USERS" + "(user_name, name, email, pwd, role,status) VALUES" + "(?,?,?,?,?,0)";
+			}
 			PreparedStatement st2 = con.prepareStatement(sql_check);
 			st2.setString(1, user);
 			ResultSet rs = st2.executeQuery();
@@ -85,9 +90,33 @@ public class LoginDAO {
 				st.setString(2, name);
 				st.setString(3, email);
 				st.setString(4, password);
+				st.setString(5, selectedRole);
 
 				// Execute the statement
 				if (st.executeUpdate() > 0) {
+					if (selectedRole.equals("manager")) {
+						sql = "select user_id from users where user_name =? and pwd = ?";
+						st2.close();
+						st2 = con.prepareStatement(sql);
+						st2.setString(1, user);
+						st2.setString(2, password);
+						rs = st2.executeQuery();
+						rs.next();
+						int uid = rs.getInt("user_id");
+						sql = "insert into manager_detail (user_id,fees) values(?,?)";
+						st2.close();
+						st2 = con.prepareStatement(sql);
+						st2.setInt(1, uid);
+						st2.setDouble(2, Double.valueOf(fee));
+						if(st2.executeUpdate()>0) {
+							con.close();
+							return "true";
+						}
+						else {
+							con.close();
+							return "false";
+						}
+					}
 					con.close();
 					return "true";
 				}
@@ -155,7 +184,6 @@ public class LoginDAO {
 		return "false";
 	}
 
-	
 	public static String getUid() {
 		String uid = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userid");
 		return uid;

@@ -3,6 +3,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ApplicationScoped;
@@ -11,16 +13,23 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
+import javax.faces.model.SelectItem;
 
 @ManagedBean(name = "Register_bean")
 @ApplicationScoped
 public class Register_bean {
 	private String name, email, uname, pwd;
 	private Integer uid;
-
+	private List<SelectItem> RoleList;
+	private String selectedRole,fee;
 	public Register_bean() {
 		// TODO Auto-generated constructor stub
 		System.out.println("in Register_bean constructor");
+		RoleList = new ArrayList<SelectItem>();
+		RoleList.add(new SelectItem("user","user"));
+		RoleList.add(new SelectItem("manager","manager"));
+		
+		
 		String u_name=(String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().
 				get("username");
 		if(u_name!=null) {
@@ -45,6 +54,43 @@ public class Register_bean {
 			
 		}
 	}
+	
+	public boolean getIsManager() {
+		if(selectedRole.equals("manager"))
+			return true;
+		return false;
+	}
+	
+	public String getFee() {
+		return fee;
+	}
+
+
+	public void setFee(String fee) {
+		this.fee = fee;
+	}
+
+
+	public List<SelectItem> getRoleList() {
+		return RoleList;
+	}
+
+
+	public void setRoleList(List<SelectItem> roleList) {
+		RoleList = roleList;
+	}
+
+
+	public String getSelectedRole() {
+		return selectedRole;
+	}
+
+
+	public void setSelectedRole(String selectedRole) {
+		this.selectedRole = selectedRole;
+	}
+
+
 	/**
 	 * @return the name
 	 */
@@ -108,7 +154,7 @@ public class Register_bean {
 
 	public String validate() {
 		System.out.println("in validate");
-		String result = LoginDAO.register(uname, name, email, pwd);
+		String result = LoginDAO.register(uname, name, email, pwd , selectedRole, fee);
 		FacesContext fc = FacesContext.getCurrentInstance();
 		ExternalContext ec = fc.getExternalContext();
 		try {

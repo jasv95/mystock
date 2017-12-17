@@ -198,7 +198,7 @@ public static String getAllDetails(String st_symbol, String selectedFunction, St
                 if (i == 0) {
                     String path = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
                 //    table2Markup += "<td><a class='btn btn-success' href='" + path + "/faces/trading.xhtml?symbol=" + symbol + "&price=" + subJsonObj.getString("4. close") + "'>Buy Stock</a></td>";
-                    	table2Markup += "<td><a class='btn btn-success' href='" + path + "/faces/trading.xhtml?symbol=" + symbol + "&price=" + subJsonObj.getString("4. close") + "'>Buy Stock</a></td>";
+                    	table2Markup += "<td><a class='btn btn-success' href='" + path + "/faces/trading.xhtml?symbol=" + symbol + "&price=" + subJsonObj.getString("4. close") + "'>Buy/Sell Stock</a></td>";
                     
                 }
                 table2Markup += "</tr>";

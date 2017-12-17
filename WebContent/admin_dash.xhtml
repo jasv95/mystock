@@ -20,7 +20,7 @@
 
 
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title>Register here</title>
+	<title>Admin Dash-board</title>
 
 	<style>
 .top-buffer {
@@ -44,26 +44,42 @@
 		<c:otherwise>
 			<div class="container">
 
+			<h:form>
 				<div class="row">
-					<h:form>
+					<div class="col-md-3">
+						<div class="form-group">
+							<h2>
+								<h:outputLabel value="Welcome #{sessionScope.username}"
+									styleClass="form-control"></h:outputLabel>
+							</h2>
+						</div>
+					</div>
 
-						<h2>
-							<h:outputLabel value="Welcome #{sessionScope.username}"></h:outputLabel>
-						</h2>
-						<h:commandButton class="mybutton" value="Logout"
-							action="#{User_bean.logout}" />
-							
-						<h:selectOneMenu id="userlist" value="#{AdminBean.selecteduser}">
-							<f:selectItems value="#{AdminBean.userList}" />
-						</h:selectOneMenu>
-						
-						<h:commandButton value="View Activity"
-							action="#{AdminBean.viewActivity}" />
-							
-					</h:form>
+					<div class="col-md-3">
+						<div class="form-group">
+							<h:commandButton class="btn btn-primary btn-lg" value="Logout"
+								action="#{User_bean.logout}" />
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<h:selectOneMenu id="userlist" value="#{AdminBean.selecteduser}"
+								styleClass="form-control">
+								<f:selectItems value="#{AdminBean.userList}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<h:commandButton class="btn btn-primary btn-lg" value="View Activity"
+								action="#{AdminBean.viewActivity}" />
+						</div>
+					</div>
+
 				</div>
+				</h:form>
 				<h:form>
-					<table>
+					<table class="table table-striped">
 						<tr>
 							<th>Symbol</th>
 							<th>Quantity</th>
@@ -88,6 +104,35 @@
 						</tbody>
 					</table>
 					<tr></tr>
+				</h:form>
+			</div>
+
+			<div>
+				<h:form>
+					<table class="table table-striped">
+						<tr>
+							<th>User Name</th>
+							<th>Name</th>
+							<th>Email</th>
+							<th>Balance</th>
+							<th>Fees</th>
+						</tr>
+						<tbody>
+							<ui:repeat var="ad" value="#{AdminBean.managerList}">
+								<h:panelGroup>
+									<tr>
+										<td>#{ad.user_name}</td>
+										<td>#{ad.name}</td>
+										<td>#{ad.email}</td>
+										<td>#{ad.balance}</td>
+										<td>#{ad.fees}</td>
+										<td><h:commandButton value="Approve"
+												action="#{AdminBean.approveManager(ad.user_id)}" /></td>
+									</tr>
+								</h:panelGroup>
+							</ui:repeat>
+						</tbody>
+					</table>
 				</h:form>
 			</div>
 		</c:otherwise>
