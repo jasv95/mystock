@@ -29,7 +29,13 @@ public class LoginDAO {
 			if (rs.next()) {
 				FacesContext fc = FacesContext.getCurrentInstance();
 				ExternalContext ec = fc.getExternalContext();
-				ec.redirect("user_dash.xhtml");
+				String role=rs.getString("role");
+				if(role.equals("user")) {
+					ec.redirect("user_dash.xhtml");
+				}
+				else if(role.equals("admin")) {
+					ec.redirect("admin_dash.xhtml");
+				}
 				String id = rs.getString(2);
 				DataConnect.close();
 				return id;

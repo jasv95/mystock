@@ -96,10 +96,12 @@ public class StockDAO {
 				ResultSet rs = st.executeQuery();
 				if (rs.next()) {
 					avail_qty = rs.getInt("st_qty");
-					String sql2 = "Update holdings set st_qty = ?";
+					String sql2 = "Update holdings set st_qty = ? where st_symbol= ? and user_id= ?";
 					st.close();
 					st = con.prepareStatement(sql2);
 					st.setInt(1, Integer.parseInt(s_qty) + avail_qty);
+					st.setString(2, s_sym);
+					st.setInt(3, Integer.parseInt(uid));
 					// Execute the statement
 					if (st.executeUpdate() > 0) {
 						AccountDAO.setAccBalance(Integer.parseInt(uid), available_bal - Total_price);
@@ -146,7 +148,7 @@ public class StockDAO {
 		try {
 			Connection con = DataConnect.getConnection();
 			String sql_check = "Select st_qty from holdings where user_id=? and st_symbol =?";
-			String sql = "update holdings set st_qty= ?";
+			String sql = "update holdings set st_qty= ? where st_symbol=? and user_id = ?";
 			PreparedStatement st = con.prepareStatement(sql_check);
 			st.setInt(1, Integer.parseInt(uid));
 			st.setString(2, s_sym);
@@ -158,6 +160,8 @@ public class StockDAO {
 					st.close();
 					st = con.prepareStatement(sql);
 					st.setInt(1, avail_qty - Integer.parseInt(s_qty));
+					st.setString(2, s_sym);
+					st.setInt(3, Integer.parseInt(uid));
 					// Execute the statement
 					if (st.executeUpdate() > 0) {
 						AccountDAO.setAccBalance(Integer.parseInt(uid), available_bal + Total_price);

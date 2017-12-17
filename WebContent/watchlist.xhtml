@@ -5,8 +5,8 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
-<h:head>
-<title>Response page</title>
+<head>
+<title>Watch list</title>
 <style>
 .mybutton {
 	font-size: 20px;
@@ -20,7 +20,7 @@
 }
 </style>
 
-</h:head>
+</head>
 
 <h:body>
 	<c:choose>
@@ -30,55 +30,32 @@
 		<c:otherwise>
 			<div class="container">
 
-				<div class="row">
-					<h:form>
-						<h:commandButton class="mybutton" value="Logout"
-							action="#{User_bean.logout}" />
-					</h:form>
-				</div>
+
 				<div class="well">
 					<h:form>
-						<table >
+						<table class="order-table">
 							<tr>
+								<th>Name</th>
 								<th>Symbol</th>
-								<th>Quantity</th>
-								<th>Unit Price</th>
-								<th>Total Price</th>
-								<th>Date</th>
-								<th>Trade Type</th>
+								<th>Price</th>
+								<th>Volume</th>
 							</tr>
 							<tbody>
-								<ui:repeat var="ac" value="#{AccountBean.activityList}">
+								<ui:repeat var="sd" value="#{StockData.watchList}">
 									<h:panelGroup>
 										<tr>
-											<td>#{ac.st_symbol}</td>
-											<td>#{ac.st_qty}</td>
-											<td>#{ac.unit_price}</td>
-											<td>#{ac.t_price}</td>
-											<td>#{ac.date}</td>
-											<td>#{ac.trade_type}</td>
+											<td>#{sd.name}</td>
+											<td>#{sd.symbol}</td>
+											<td>#{sd.price}</td>
+											<td>#{sd.volume}</td>
+											<td><h:commandButton value="Buy" 
+													action="#{StockData.buyStock(sd.symbol,sd.price)}" /></td>
 										</tr>
 									</h:panelGroup>
 								</ui:repeat>
 							</tbody>
 						</table>
-						<tr></tr>
-						<table >
-							<tr>
-								<th>Symbol</th>
-								<th>Quantity</th>
-							</tr>
-							<tbody>
-								<ui:repeat var="ac" value="#{AccountBean.holdingList}">
-									<h:panelGroup>
-										<tr>
-											<td>#{ac.st_sym}</td>
-											<td>#{ac.st_qty}</td>
-										</tr>
-									</h:panelGroup>
-								</ui:repeat>
-							</tbody>
-						</table>
+						
 						
 					</h:form>
 				</div>
