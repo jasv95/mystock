@@ -12,6 +12,7 @@ import javax.faces.context.FacesContext;
 public class AccountDAO {
 
 	public static Double getAccBalance(int user_id) {
+
 		Connection con = null;
 		try {
 			// Setup the DataSource object

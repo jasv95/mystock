@@ -52,6 +52,7 @@
 						</h2>
 						<h:commandButton class="mybutton" value="Logout"
 							action="#{User_bean.logout}" />
+							
 						<h:selectOneMenu id="stocklist" value="#{StockData.stockList}">
 							<f:selectItems value="#{StockData.allStock}" var="sd"
 								itemLabel="#{sd.stockName}" itemValue="#{sd.stockId}" />

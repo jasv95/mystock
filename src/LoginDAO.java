@@ -19,10 +19,11 @@ public class LoginDAO {
 			con = DataConnect.getConnection();
 
 			// Get a prepared SQL statement
-			String sql = "SELECT user_name,user_id from users where user_name = ? and pwd = ?";
+			String sql = "SELECT user_name,user_id,role from users where user_name = ? and pwd = ? and status=?";
 			PreparedStatement st = con.prepareStatement(sql);
 			st.setString(1, user);
 			st.setString(2, password);
+			st.setInt(3, 1);
 			// Execute the statement
 			ResultSet rs = st.executeQuery();
 
@@ -36,7 +37,7 @@ public class LoginDAO {
 				else if(role.equals("admin")) {
 					ec.redirect("admin_dash.xhtml");
 				}
-				String id = rs.getString(2);
+				String id = rs.getString("user_id");
 				DataConnect.close();
 				return id;
 			} else {

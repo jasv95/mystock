@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet"
+		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+
+	<!-- Optional theme -->
+	<link rel="stylesheet"
+		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" />
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" />
+
+
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Register here</title>
+
+	<style>
+.top-buffer {
+	margin-top: 5px;
+}
+
+.divider {
+	width: 5px;
+	height: auto;
+	display: inline-block;
+}
+</style>
+
+</h:head>
+
+<h:body>
+	<c:choose>
+		<c:when test="#{sessionScope.username == null}">
+			<h1>You are Not logged in</h1>
+		</c:when>
+		<c:otherwise>
+			<div class="container">
+
+				<div class="row">
+					<h:form>
+
+						<h2>
+							<h:outputLabel value="Welcome #{sessionScope.username}"></h:outputLabel>
+						</h2>
+						<h:commandButton class="mybutton" value="Logout"
+							action="#{User_bean.logout}" />
+							
+						<h:selectOneMenu id="userlist" value="#{AdminBean.selecteduser}">
+							<f:selectItems value="#{AdminBean.userList}" />
+						</h:selectOneMenu>
+						
+						<h:commandButton value="View Activity"
+							action="#{AdminBean.viewActivity}" />
+							
+					</h:form>
+				</div>
+				<h:form>
+					<table>
+						<tr>
+							<th>Symbol</th>
+							<th>Quantity</th>
+							<th>Unit Price</th>
+							<th>Total Price</th>
+							<th>Date</th>
+							<th>Trade Type</th>
+						</tr>
+						<tbody>
+							<ui:repeat var="ac" value="#{AdminBean.activityList}">
+								<h:panelGroup>
+									<tr>
+										<td>#{ac.st_symbol}</td>
+										<td>#{ac.st_qty}</td>
+										<td>#{ac.unit_price}</td>
+										<td>#{ac.t_price}</td>
+										<td>#{ac.date}</td>
+										<td>#{ac.trade_type}</td>
+									</tr>
+								</h:panelGroup>
+							</ui:repeat>
+						</tbody>
+					</table>
+					<tr></tr>
+				</h:form>
+			</div>
+		</c:otherwise>
+	</c:choose>
+</h:body>
+</html>
