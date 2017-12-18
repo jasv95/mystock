@@ -20,7 +20,7 @@
 
 
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title>User Dash-board</title>
+	<title>Manager List</title>
 
 	<style>
 .top-buffer {
@@ -43,49 +43,48 @@
 		</c:when>
 		<c:otherwise>
 			<div class="container">
-			<div class="container">
-					<h:form>
-						<div class="navbar navbar-inverse">
-							<div class="pull-right">
-								<h:commandButton class="btn btn-default btn-lg" value="Logout"
-									action="#{User_bean.logout}" />
-							</div>
-							<div>
-								<h:commandButton class="btn btn-default btn-lg" value="DashBoard"
-									action="#{User_bean.redToUserDashboard}" />
-							</div>
+				<div class="container">
+				<h:form>
+					<div class="navbar navbar-inverse">
+						<div class="pull-right">
+							<h:commandButton class="btn btn-default btn-lg" value="Logout"
+								action="#{User_bean.logout}" />
 						</div>
+						<h:commandButton class="btn btn-default btn-lg" value="DashBoard"
+								action="#{User_bean.redToUserDashboard}" />
+					</div>
 					</h:form>
 				</div>
-
 				<div class="well">
 					<h:form>
-						<table  class="table table-striped">
+						
+						<h2>Manager Profiles List</h2>
+						<table class="table table-striped">
 							<tr>
-								<th>Symbol</th>
-								<th>Price</th>
-								<th>Volume</th>
+								<th>Name</th>
+								<th>Email</th>
+								<th>Fees</th>
 							</tr>
 							<tbody>
-								<ui:repeat var="sd" value="#{StockData.watchList}">
+								<ui:repeat var="ml" value="#{User_bean.managerList}">
 									<h:panelGroup>
 										<tr>
-											<td>#{sd.symbol}</td>
-											<td>#{sd.price}</td>
-											<td>#{sd.volume}</td>
-											<td><h:commandButton class="btn btn-primary btn-lg" value="Buy/Sell" 
-													action="#{StockData.buyStock(sd.symbol,sd.price)}" /></td>
+											<td>#{ml.name}</td>
+											<td>#{ml.email}</td>
+											<td>#{ml.fee}</td>
+											<td>
+											<h:commandButton class="btn btn-primary btn-md" value="Select" 
+													action="#{User_bean.selectManager(ml.m_id)}" /></td>
 										</tr>
 									</h:panelGroup>
 								</ui:repeat>
 							</tbody>
 						</table>
-						
-						
+						<tr></tr>
+						<tr></tr>
 					</h:form>
 				</div>
 			</div>
-
 		</c:otherwise>
 	</c:choose>
 </h:body>

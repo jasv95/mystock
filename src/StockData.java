@@ -14,6 +14,7 @@ import java.util.Set;
 
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -29,7 +30,7 @@ import javax.net.ssl.X509TrustManager;
 import javax.servlet.http.HttpServletRequest;
 
 @ManagedBean(name = "StockData")
-@ViewScoped
+@ApplicationScoped
 public class StockData {
 	private static final long serialVersionUID = 1L;
 	Connection con;
@@ -44,9 +45,8 @@ public class StockData {
     private String selectedInterval;
     private ArrayList<SelectItem> availableFunction;
     private String selectedFunction;
-	
-    
-    
+
+
 	public String getTable1Markup() {
 		return table1Markup;
 	}
@@ -277,5 +277,7 @@ public class StockData {
 		StockDAO.sell(s_sym,s_price,s_qty);
 		return "Account.xhtml";
 	}
+	
+	
 	
 }

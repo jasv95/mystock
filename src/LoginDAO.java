@@ -38,6 +38,10 @@ public class LoginDAO {
 					FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("role", "admin");
 					ec.redirect("admin_dash.xhtml");
 				}
+				else if(role.equals("manager")) {
+					FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("role", "admin");
+					ec.redirect("manager_dash.xhtml");
+				}
 				String id = rs.getString("user_id");
 				DataConnect.close();
 				return id;
@@ -187,6 +191,54 @@ public class LoginDAO {
 	public static String getUid() {
 		String uid = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userid");
 		return uid;
+	}
+
+	public static boolean selectManager(int mid) {
+		// TODO Auto-generated method stub
+		try {
+			Connection con = DataConnect.getConnection();
+			String sql = "update users set mid = ? where user_id=?";
+			int uid = Integer.parseInt(getUid());
+			PreparedStatement st = con.prepareStatement(sql);
+			st.setInt(1, mid);
+			st.setInt(2, uid);
+			if(st.executeUpdate()>0) {
+				return true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+		
+	}
+
+	public static void createMsg(double reqAmt, int m_id,String msg) {
+		// TODO Auto-generated method stub
+		try {
+			Connection con = DataConnect.getConnection();
+			String sql = "Insert into messages (user_id,manager_id,msg,amount)"
+					+ "values(?,?,?,?)";
+			PreparedStatement st = con.prepareStatement(sql);
+			st.setInt(1, Integer.parseInt(getUid()));
+			st.setInt(2, m_id);
+			st.setString(3, msg);
+			st.setDouble(4, reqAmt);
+			st.executeUpdate();
+			double balance = AccountDAO.getAccBalance(Integer.parseInt(getUid()));
+			if(reqAmt<=balance) {
+				double NewBalance = balance-reqAmt;
+				AccountDAO.setAccBalance(Integer.parseInt(getUid()), NewBalance);
+				double m_balance=AccountDAO.getAccBalance(m_id);
+				m_balance += reqAmt;
+				AccountDAO.setAccBalance(m_id, m_balance);
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 }

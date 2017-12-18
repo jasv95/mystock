@@ -42,43 +42,37 @@
 			<h1>You are Not logged in</h1>
 		</c:when>
 		<c:otherwise>
+		<div class="container">
 			<div class="container">
 
-			<h:form>
-				<div class="row">
-					<div class="col-md-3">
-						<div class="form-group">
-							<h2>
-								<h:outputLabel value="Welcome #{sessionScope.username}"
-									styleClass="form-control"></h:outputLabel>
-							</h2>
-						</div>
-					</div>
-
-					<div class="col-md-3">
-						<div class="form-group">
-							<h:commandButton class="btn btn-primary btn-lg" value="Logout"
-								action="#{User_bean.logout}" />
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="form-group">
-							<h:selectOneMenu id="userlist" value="#{AdminBean.selecteduser}"
-								styleClass="form-control">
-								<f:selectItems value="#{AdminBean.userList}" />
-							</h:selectOneMenu>
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="form-group">
-							<h:commandButton class="btn btn-primary btn-lg" value="View Activity"
-								action="#{AdminBean.viewActivity}" />
-						</div>
-					</div>
-
-				</div>
-				</h:form>
 				<h:form>
+					<h2>
+						<h:outputLabel value="Welcome #{sessionScope.username}"></h:outputLabel>
+					</h2>
+
+					<div class="container">
+						<div class="navbar navbar-inverse">
+							<div class="pull-right">
+								<h:commandButton class="btn btn-default btn-lg" value="Logout"
+									action="#{User_bean.logout}" />
+							</div>
+						</div>
+					</div>
+
+					<h2>Select user to view Activity</h2>
+					<h:panelGrid>
+					<h:selectOneMenu id="userlist" value="#{AdminBean.selecteduser}"
+						styleClass="form-control">
+						<f:selectItems value="#{AdminBean.userList}" />
+					</h:selectOneMenu>
+					</h:panelGrid>
+					
+					<h:commandButton class="btn btn-primary btn-lg"
+						value="View Activity" action="#{AdminBean.viewActivity}" />
+				</h:form>
+				<br />
+				<h:form>
+				<h3>User Activity</h3>
 					<table class="table table-striped">
 						<tr>
 							<th>Symbol</th>
@@ -109,6 +103,7 @@
 
 			<div>
 				<h:form>
+				<h3>Approve Managers</h3>
 					<table class="table table-striped">
 						<tr>
 							<th>User Name</th>
@@ -134,6 +129,7 @@
 						</tbody>
 					</table>
 				</h:form>
+			</div>
 			</div>
 		</c:otherwise>
 	</c:choose>

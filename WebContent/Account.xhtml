@@ -44,12 +44,18 @@
 		<c:otherwise>
 			<div class="container">
 				<div class="container">
-					<div class="navbar navbar-inverse">
-						<div class="pull-right">
-							<h:commandButton class="btn btn-default btn-lg" value="Logout"
-								action="#{User_bean.logout}" />
+					<h:form>
+						<div class="navbar navbar-inverse">
+							<div class="pull-right">
+								<h:commandButton class="btn btn-default btn-lg" value="Logout"
+									action="#{User_bean.logout}" />
+							</div>
+							<div>
+								<h:commandButton class="btn btn-default btn-lg" value="DashBoard"
+									action="#{User_bean.redToUserDashboard}" />
+							</div>
 						</div>
-					</div>
+					</h:form>
 				</div>
 				<div class="well">
 					<h:form>
@@ -66,6 +72,30 @@
 								</tr>
 							</tbody>
 						</table>
+
+
+						<h2>My Manager Profile</h2>
+						<table class="table table-striped">
+							<tr>
+								<th>Name</th>
+								<th>Email</th>
+								<th>Fees</th>
+							</tr>
+							<tbody>
+								<ui:repeat var="ml" value="#{User_bean.myManager}">
+									<h:panelGroup>
+										<tr>
+											<td>#{ml.name}</td>
+											<td>#{ml.email}</td>
+											<td>#{ml.fee}</td>
+										</tr>
+									</h:panelGroup>
+								</ui:repeat>
+							</tbody>
+						</table>
+
+
+
 						<h2>Current Holdings</h2>
 						<table class="table table-striped">
 							<tr>

@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet"
+		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+
+	<!-- Optional theme -->
+	<link rel="stylesheet"
+		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" />
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" />
+
+
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Admin Dash-board</title>
+
+	<style>
+.top-buffer {
+	margin-top: 5px;
+}
+
+.divider {
+	width: 5px;
+	height: auto;
+	display: inline-block;
+}
+</style>
+
+</h:head>
+
+<h:body>
+	<c:choose>
+		<c:when test="#{sessionScope.username == null}">
+			<h1>You are Not logged in</h1>
+		</c:when>
+		<c:otherwise>
+			<div class="container">
+
+			<h:form>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<h2>
+								<h:outputLabel value="Welcome #{sessionScope.username}"
+									styleClass="form-control"></h:outputLabel>
+							</h2>
+						</div>
+					</div>
+
+					<div class="col-md-3">
+						<div class="form-group">
+							<h:commandButton class="btn btn-primary btn-lg" value="Logout"
+								action="#{User_bean.logout}" />
+						</div>
+					</div>
+					
+					
+
+				</div>
+				</h:form>
+				<h:form>
+					<table class="table table-striped">
+						<tr>
+							<th>Name</th>
+							<th>Message</th>
+							<th>Amount sent</th>
+							<th>Time</th>
+						</tr>
+						<tbody>
+							<ui:repeat var="m" value="#{ManagerBean.md}">
+								<h:panelGroup>
+									<tr>
+										<td>#{m.uname}</td>
+										<td>#{m.msg}</td>
+										<td>#{m.amt}</td>
+										<td>#{m.time}</td>
+									</tr>
+								</h:panelGroup>
+							</ui:repeat>
+						</tbody>
+					</table>
+					<tr></tr>
+				</h:form>
+			</div>
+
+			
+		</c:otherwise>
+	</c:choose>
+</h:body>
+</html>
