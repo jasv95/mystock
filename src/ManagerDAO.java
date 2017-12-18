@@ -138,7 +138,7 @@ public class ManagerDAO {
 		ArrayList<MsgDetail> md = new ArrayList<MsgDetail>();
 		try {
 			Connection con = DataConnect.getConnection();
-			String sql = "Select * from messages natural join users where manager_id=? and status=NULL";
+			String sql = "Select * from messages,users where messages.user_id=users.user_id and messages.manager_id=? and messages.status is NULL";
 			PreparedStatement st = con.prepareStatement(sql);
 			st.setInt(1, Integer.parseInt(LoginDAO.getUid()));
 			ResultSet rs = st.executeQuery();

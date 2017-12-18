@@ -12,7 +12,7 @@ public class AdminDAO {
 			Connection con = DataConnect.getConnection();
 			// Get a prepared SQL statement
 		
-						String sql = "SELECT * from users natural join manager_detail where role = ? and status = ?";
+						String sql = "SELECT * from users natural join manager_detail where role = ? and status is null";
 						PreparedStatement st = con.prepareStatement(sql);
 						st.setString(1, "manager");
 						st.setInt(2,0);;
